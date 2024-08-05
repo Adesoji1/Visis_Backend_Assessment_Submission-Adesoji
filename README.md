@@ -54,7 +54,8 @@ The video Link of this task could be found  -----> [here](https://drive.google.c
 ├── initialize_db.py
 └── dataprep.py
 ├── bookpdf
-└──Screenshot
+├── Screenshot
+└── Alu
 ```
 
 ## Project Structure
