@@ -23,7 +23,7 @@
 
 This repository contains the backend implementation for the Visis Backend Assessment. The backend API handles book information requests and summary generation using a pretrained summarizer model. The Pretrained model used is `distilbart-cnn-12-6`, available at [Hugging Face](https://huggingface.co/sshleifer/distilbart-cnn-12-6).  click ---> [here](Screenshot/14.png) . Also i trained a model from scratch which you will find in model Architecture and preprocessing technique for trained model , in Table of contents section. Furthermore, Using Large Language Models, i created a model using llama [here](https://huggingface.co/Adesoji7/llama3-8B-4Bit-InstructionTuned-Alpaca) which is 5Gb and a guff file format.
 
-The video Link of this task could be found  -----> [here](https://drive.google.com/file/d/1gGjINozgq470sdJzNzFL_3ON_bD_cxX0/view?usp=sharing) . So far, i have give `3` solutions for this Assessment
+The video Link of this task could be found  -----> [here](https://drive.google.com/file/d/1gGjINozgq470sdJzNzFL_3ON_bD_cxX0/view?usp=sharing) . So far, i have given `3` solutions for this Assessment and the video link for the llama model option is found [here](https://drive.google.com/file/d/10kQE4TQQjo6uigI9yPFZIzydQDouJkFD/view?usp=sharing)
 
 ## Directory Structure
 
