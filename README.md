@@ -15,13 +15,15 @@
 - [Swagger Documentation](#swagger-documentation)
 - [Notes](#notes)
 - [Dependency](#dependency)
+- [llama-cpp-python](#llama-cpp-python)
+- [Model Architecture For the LLama Solution](#model-architecture-for-the-llama-solution)
 
 
 ## Introduction
 
-This repository contains the backend implementation for the Visis Backend Assessment. The backend API handles book information requests and summary generation using a pretrained summarizer model. The Pretrained model used is `distilbart-cnn-12-6`, available at [Hugging Face](https://huggingface.co/sshleifer/distilbart-cnn-12-6).  click ---> [here](Screenshot/14.png) . Also i trained a model from scratch which you will find in model Architecture and preprocessing technique for trained model , in Table of contents section
+This repository contains the backend implementation for the Visis Backend Assessment. The backend API handles book information requests and summary generation using a pretrained summarizer model. The Pretrained model used is `distilbart-cnn-12-6`, available at [Hugging Face](https://huggingface.co/sshleifer/distilbart-cnn-12-6).  click ---> [here](Screenshot/14.png) . Also i trained a model from scratch which you will find in model Architecture and preprocessing technique for trained model , in Table of contents section. Furthermore, Using Large Language Models, i created a model using llama [here](https://huggingface.co/Adesoji7/llama3-8B-4Bit-InstructionTuned-Alpaca) which is 5Gb and a guff file format.
 
-The video Link of this task could be found  -----> [here](https://drive.google.com/file/d/1gGjINozgq470sdJzNzFL_3ON_bD_cxX0/view?usp=sharing)
+The video Link of this task could be found  -----> [here](https://drive.google.com/file/d/1gGjINozgq470sdJzNzFL_3ON_bD_cxX0/view?usp=sharing) . So far, i have give `3` solutions for this Assessment
 
 ## Directory Structure
 
@@ -391,3 +393,119 @@ Enjoy!
 ## Dependency
 
 The dependency  for setting up this project could be obtained using pipreqs or pipfreeze. 
+
+## llama-cpp-python
+
+I used llama model to generate summary from a pdf and also generate points as seen in the screenshot below, all the files are present [here](./Alu/) . Thw models are present [here](./Alu/models.py)
+
+To run the application, you need to install `requirements.txt` using pip, view the file  [here](Alu/requirements.txt) and run
+
+```bash
+python3 api.py
+```
+
+This runs the flask server, then you proceed to call either of the endpoints using
+
+```bash
+python3 call_api.py
+```
+
+This calls the  endpoint url1 = "http://127.0.0.1:5000/generate-summary" which summarizes the pdf [here](Visis_Backend_Assessment_Submission-Adesoji/Alu/Cover.pdf)
+
+![llama3](Screenshot/llamageneratesummary.png)
+
+while
+
+```bash
+curl -X POST "http://127.0.0.1:5000/generate-points" -H "Content-Type: application/json" -d '{"points": "Book description here"}'
+```
+
+calls this endpoint url = "http://127.0.0.1:5000/generate-points" , screenshots of calling the endpoints are seen  below
+
+
+
+![llama3](Screenshot/llamapoints.png)
+
+The postman Successfull request is seen here with the new line characters /n
+![postman](Screenshot/Pastedimage1.png)
+
+![points](Screenshot/pointss.png)
+
+The google colab notebook is found [here](./Alu/ALULLMs.ipynb)
+
+
+## Model Architecture For the LLama Solution
+
+The model architecture described in the given code is based on the `llama3.1-8B-4Bit-InstructionTuned-OIG` model from Hugging Face, which is a version of LLaMA (Large Language Model Meta AI) optimized for instruction-following tasks and fine-tuned with the Alpaca dataset. 
+
+#### Key Features:
+
+1. **LLaMA (Large Language Model Meta AI):**
+   - **Architecture:** The model follows the transformer architecture, commonly used in many state-of-the-art language models like GPT-3.
+   - **Parameters:** This specific model has approximately 8 billion parameters, which allows it to generate more coherent and contextually relevant responses compared to smaller models.
+   - **Instruction-Tuned:** The model has been fine-tuned using instruction-following data from the Alpaca dataset, enhancing its ability to understand and follow human instructions accurately.
+
+2. **4-Bit Quantization:**
+   - The model has been quantized to 4 bits, reducing the memory footprint and computational requirements. This makes it more efficient to run on consumer-grade hardware while maintaining a high level of performance. The GUff binary format
+
+3. **Pretrained and Fine-tuned:**
+   - **Pretrained:** The model was initially pretrained on a large corpus of text data, enabling it to understand and generate human-like text.
+   - **Fine-tuned:** Further fine-tuned on instruction-following datasets to improve its ability to respond to specific tasks and instructions effectively.
+
+### RoPE Scaling for LLMs
+
+RoPE (Rotary Position Embeddings) Scaling is a technique used to enhance the model's capability to handle longer sequences of data, which are beyond the model's original training sequence length. RoPE scaling modifies how the model interprets positional information in the input sequences.
+
+#### Benefits:
+
+1. **Handling Longer Sequences:**
+   - RoPE Scaling allows the model to effectively manage and generate longer sequences of text, such as summarizing long documents or generating detailed code snippets.
+2. **Adaptability:**
+   - It improves the model's adaptability to different data formats and structures, resulting in more accurate and reliable outputs.
+3. **New Applications:**
+   - Opens up possibilities for new applications, including text summarization of lengthy documents and generating complex functionalities in code.
+
+#### RoPE Scaling Configuration:
+
+1. **Dynamic Scaling:**
+   - **Type:** `dynamic`
+   - **Factor Base:** `1000.0`
+   - This configuration dynamically adjusts the positional embeddings based on the factor base, allowing the model to handle a wide range of sequence lengths flexibly.
+
+2. **Linear Scaling:**
+   - **Type:** `linear`
+   - **Factor:** `2.0`
+   - This configuration linearly scales the positional embeddings. It increases the positional information's influence proportionally to the sequence length, which can help maintain the model's performance over longer sequences.
+
+### Usage in the Code:
+
+The provided code initializes the LLaMA model with specific configurations for GPU usage, context length, and RoPE scaling:
+
+```python
+from llama_cpp import Llama, LlamaCache
+import pdf
+
+cache = LlamaCache()
+rope_scaling = {
+    "type": "dynamic",
+    "factor_base": 1000.0
+}
+
+llm = Llama.from_pretrained(
+    repo_id="Adesoji7/llama3.1-8B-4Bit-InstructionTuned-OIG",
+    n_gpu_layers=30,  # Number of layers to load on the GPU. Adjust based on your GPU memory.
+    n_ctx=2028,
+    filename="unsloth.Q4_K_M.gguf", 
+    verbose=False,
+    rope_scaling=rope_scaling,
+    cache=cache
+)
+```
+
+### Summary:
+
+By incorporating RoPE Scaling, LLMs become more adept at handling sequences exceeding their training data and processing diverse data formats and structures. This leads to more accurate and reliable outputs for various tasks. RoPE Scaling also opens doors for exploring new applications of LLMs, such as text summarization of longer documents or code generation for complex functionalities.
+
+#### Linear Scaling:
+
+Using `linear` RoPE scaling with a factor of `2.0` means the positional embeddings' influence increases linearly with the sequence length, helping the model maintain performance over longer sequences. This is simpler and more predictable compared to dynamic scaling, which might adjust more flexibly based on various factors.
