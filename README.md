@@ -68,7 +68,7 @@ The video Link of this task could be found  -----> [here](https://drive.google.c
 - `train.py`: Script for training the model.
 - `dataprep.py`: Script for loading data into the database.
 - `scrape.py`: Script for scraping text data.
-- `screenshot/1.jpg`: Screenshot of the NVIDIA GPU details.
+- `screenshot/19.png`: Screenshot of the NVIDIA GPU details.
 - `Update_schema.py`: Update database Schema.
 - `test.db`: SQLite db created named test.db. Just to mention a few
 - `summarizer`:This script contains the functionality for loading the pre-trained BART model, tokenizing the input text, and generating text summaries. It also defines the preprocessing and data augmentation techniques used for preparing the text data
@@ -411,7 +411,7 @@ This runs the flask server, then you proceed to call either of the endpoints usi
 python3 call_api.py
 ```
 
-This calls the  endpoint url1 = "http://127.0.0.1:5000/generate-summary" which summarizes the pdf [here](Visis_Backend_Assessment_Submission-Adesoji/Alu/Cover.pdf)
+This calls the  endpoint url1 = "http://127.0.0.1:5000/generate-summary" which summarizes the pdf [here](Alu/Cover.pdf)
 
 ![llama3](Screenshot/llamageneratesummary.png)
 
